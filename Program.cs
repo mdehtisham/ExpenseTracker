@@ -30,6 +30,7 @@ namespace ExpenseTracker
                         break;
                     case "4":
                         ShowSummary();
+                        break;
                     case "5":
                         SearchExpenses();
                         break;
@@ -40,8 +41,8 @@ namespace ExpenseTracker
                         Console.WriteLine("Invalid choice. Please try again.");
                         break;
                 }
-
-                System.Console.WriteLine("\n Press any key to continue...");
+            
+                Console.WriteLine("\n Press any key to continue...");
                 Console.ReadKey();
                 Console.Clear();
             }
@@ -60,7 +61,7 @@ namespace ExpenseTracker
         }
 
         static void AddExpense() => Console.WriteLine("Add Expense - To be implemented");
-        static void ViewExpense() => Console.WriteLine("ViewExpense - To be implemented");
+        static void ViewExpenses() => Console.WriteLine("ViewExpense - To be implemented");
         static void DeleteExpense() => Console.WriteLine("Delete Expense - To be implemented");
         static void ShowSummary() => Console.WriteLine("Show Summary - To be implemented");
         static void SearchExpenses() => Console.WriteLine("Search Expenses - To be implemented");
