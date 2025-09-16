@@ -133,7 +133,36 @@ namespace ExpenseTracker
             Console.WriteLine(new string('-', 80));
             Console.WriteLine($"Total: ${expenseManager.GetTotalExpenses():F2}");
         }
-        static void DeleteExpense() => Console.WriteLine("Delete Expense - To be implemented");
+       static void DeleteExpense()
+        {
+            Console.WriteLine("\n--- Delete Expense ---");
+            
+            var expenses = expenseManager.GetAllExpenses();
+            if (!expenses.Any())
+            {
+                Console.WriteLine("No expenses to delete.");
+                return;
+            }
+            
+            // Show current expenses
+            ViewExpenses();
+            
+            Console.Write("\nEnter ID of expense to delete: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("Invalid ID format.");
+                return;
+            }
+            
+            if (expenseManager.DeleteExpense(id))
+            {
+                Console.WriteLine("Expense deleted successfully!");
+            }
+            else
+            {
+                Console.WriteLine("Expense not found.");
+            }
+        }
         static void ShowSummary() => Console.WriteLine("Show Summary - To be implemented");
         static void SearchExpenses() => Console.WriteLine("Search Expenses - To be implemented");
     }
