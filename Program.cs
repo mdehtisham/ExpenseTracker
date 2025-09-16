@@ -60,7 +60,56 @@ namespace ExpenseTracker
             Console.Write("Choose an option: ");
         }
 
-        static void AddExpense() => Console.WriteLine("Add Expense - To be implemented");
+        static void AddExpense()
+        {
+            try
+            {
+                Console.WriteLine("\n--- Add New Expense ---");
+                
+                // Get amount
+                Console.Write("Enter amount: $");
+                if (!decimal.TryParse(Console.ReadLine(), out decimal amount) || amount <= 0)
+                {
+                    Console.WriteLine("Invalid amount. Please enter a positive number.");
+                    return;
+                }
+                
+                // Get description
+                Console.Write("Enter description: ");
+                string description = Console.ReadLine()?.Trim() ?? "";
+                if (string.IsNullOrWhiteSpace(description))
+                {
+                    Console.WriteLine("Description cannot be empty.");
+                    return;
+                }
+                
+                // Get category
+                Console.WriteLine("Select category:");
+                var categories = Enum.GetValues(typeof(ExpenseCategory));
+                for (int i = 0; i < categories.Length; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {categories.GetValue(i)}");
+                }
+                
+                Console.Write("Enter category number: ");
+                if (!int.TryParse(Console.ReadLine(), out int categoryChoice) || 
+                    categoryChoice < 1 || categoryChoice > categories.Length)
+                {
+                    Console.WriteLine("Invalid category selection.");
+                    return;
+                }
+                
+                var selectedCategory = (ExpenseCategory)categories.GetValue(categoryChoice - 1)!;
+                
+                // Create and add expense
+                var expense = new Expense(amount, description, selectedCategory);
+                expenseManager.AddExpense(expense);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding expense: {ex.Message}");
+            }
+        }
         static void ViewExpenses() => Console.WriteLine("ViewExpense - To be implemented");
         static void DeleteExpense() => Console.WriteLine("Delete Expense - To be implemented");
         static void ShowSummary() => Console.WriteLine("Show Summary - To be implemented");
