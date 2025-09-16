@@ -2,9 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <!-- Conditionally target net8.0 if net9.0 is not supported -->
+    <TargetFrameworks Condition="'$(NETCoreSdkVersion)' &gt;= '9.0'">net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(NETCoreSdkVersion)' &lt; '9.0'">net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="10.0.0-rc.1.25451.107" />
+  </ItemGroup>
 
 </Project>
