@@ -110,7 +110,29 @@ namespace ExpenseTracker
                 Console.WriteLine($"Error adding expense: {ex.Message}");
             }
         }
-        static void ViewExpenses() => Console.WriteLine("ViewExpense - To be implemented");
+        static void ViewExpenses()
+        {
+            Console.WriteLine("\n--- All Expenses ---");
+            
+            var expenses = expenseManager.GetAllExpenses();
+            
+            if (!expenses.Any())
+            {
+                Console.WriteLine("No expenses recorded yet.");
+                return;
+            }
+            
+            Console.WriteLine($"{"ID",-5} {"Date",-12} {"Category",-15} {"Amount",-10} {"Description",-30}");
+            Console.WriteLine(new string('-', 80));
+            
+            foreach (var expense in expenses.OrderByDescending(e => e.Date))
+            {
+                Console.WriteLine($"{expense.Id,-5} {expense.Date:yyyy-MM-dd,-12} {expense.Category,-15} ${expense.Amount,-9:F2} {expense.Description,-30}");
+            }
+            
+            Console.WriteLine(new string('-', 80));
+            Console.WriteLine($"Total: ${expenseManager.GetTotalExpenses():F2}");
+        }
         static void DeleteExpense() => Console.WriteLine("Delete Expense - To be implemented");
         static void ShowSummary() => Console.WriteLine("Show Summary - To be implemented");
         static void SearchExpenses() => Console.WriteLine("Search Expenses - To be implemented");
