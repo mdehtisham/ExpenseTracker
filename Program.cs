@@ -11,6 +11,7 @@ namespace ExpenseTracker
         static void Main(string[] args)
         {
             Console.WriteLine("=== Personal Expense Tracker ===");
+            expenseManager.LoadFromFile();
 
             while (true)
             {
@@ -35,13 +36,15 @@ namespace ExpenseTracker
                         SearchExpenses();
                         break;
                     case "6":
-                        Console.WriteLine("Exiting the application. Goodbye!");
+                        expenseManager.SaveToFile();
+                        Console.WriteLine("Goodbye!");
                         return;
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
                         break;
                 }
-            
+                // Auto-save after each operation
+                expenseManager.SaveToFile();
                 Console.WriteLine("\n Press any key to continue...");
                 Console.ReadKey();
                 Console.Clear();
@@ -163,7 +166,47 @@ namespace ExpenseTracker
                 Console.WriteLine("Expense not found.");
             }
         }
-        static void ShowSummary() => Console.WriteLine("Show Summary - To be implemented");
+        
+        
+        static void ShowSummary()
+        {
+            Console.WriteLine("\n--- Expense Summary ---");
+
+            var expenses = expenseManager.GetAllExpenses();
+            if (!expenses.Any())
+            {
+                Console.WriteLine("No expenses to summarize.");
+                return;
+            }
+
+            // Summary by category
+            Console.WriteLine("\nBy Category:");
+            var categoryTotals = expenses
+                .GroupBy(e => e.Category)
+                .OrderByDescending(g => g.Sum(e => e.Amount))
+                .ToList();
+
+            foreach (var group in categoryTotals)
+            {
+                Console.WriteLine($"{group.Key,-15}: ${group.Sum(e => e.Amount):F2} ({group.Count()} expenses)");
+            }
+
+            // Monthly summary
+            Console.WriteLine("\nBy Month:");
+            var monthlyTotals = expenses
+                .GroupBy(e => e.Date.ToString("yyyy-MM"))
+                .OrderByDescending(g => g.Key)
+                .Take(6) // Last 6 months
+                .ToList();
+
+            foreach (var group in monthlyTotals)
+            {
+                Console.WriteLine($"{group.Key}: ${group.Sum(e => e.Amount):F2} ({group.Count()} expenses)");
+            }
+
+            Console.WriteLine($"\nOverall Total: ${expenses.Sum(e => e.Amount):F2}");
+            Console.WriteLine($"Average per expense: ${expenses.Average(e => e.Amount):F2}");
+        }
         static void SearchExpenses() => Console.WriteLine("Search Expenses - To be implemented");
     }
 }
